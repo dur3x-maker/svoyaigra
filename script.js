@@ -33,6 +33,7 @@ const gameState = {
     currentCategories: [],
     allShuffledCategories: [],
     categoryData: {},
+    questionPools: {},
     usedQuestions: new Set(),
     currentQuestion: null,
     currentAnsweringPlayer: null,
@@ -174,13 +175,25 @@ function startGame() {
 // ЗАГРУЗКА ЭТАПА
 // ========================================
 
-function loadStage() {
+async function loadStage() {
     const stage = STAGES[gameState.currentStage];
     elements.stageTitle.textContent = stage.name;
     
     const startIndex = gameState.currentStage * 4;
     gameState.currentCategories = gameState.allShuffledCategories.slice(startIndex, startIndex + 4);
     gameState.blockedPlayers = [];
+    
+    const level = gameState.currentStage + 1;
+    gameState.questionPools = {};
+    
+    for (const category of gameState.currentCategories) {
+        const categoryData = await loadCategoryData(category);
+        const levelQuestions = getQuestionsByLevel(categoryData, level);
+        gameState.questionPools[category.id] = {
+            questions: levelQuestions,
+            index: 0
+        };
+    }
     
     renderGameBoard();
     renderScoreboard();
@@ -260,17 +273,21 @@ async function openQuestion(categoryIndex, questionIndex, points) {
     const category = gameState.currentCategories[categoryIndex];
     const questionId = `${gameState.currentStage}-${categoryIndex}-${questionIndex}`;
     
-    const categoryData = await loadCategoryData(category);
+    const pool = gameState.questionPools[category.id];
     
-    const level = gameState.currentStage + 1;
-    const levelQuestions = getQuestionsByLevel(categoryData, level);
-    
-    if (levelQuestions.length === 0) {
-        console.error(`No questions found for level ${level} in category ${category.id}`);
+    if (!pool || pool.questions.length === 0) {
+        console.error(`No questions available for category ${category.id}`);
         return;
     }
     
-    const questionData = levelQuestions[questionIndex % levelQuestions.length];
+    if (pool.index >= pool.questions.length) {
+        console.error(`No more questions in pool for category ${category.id}`);
+        return;
+    }
+    
+    const questionData = pool.questions[pool.index];
+    pool.index++;
+    
     const isCatInBag = Math.random() < 0.15;
     
     gameState.currentQuestion = {
