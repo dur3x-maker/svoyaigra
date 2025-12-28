@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Своя игра</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Экран старта -->
+        <div id="start-screen" class="screen active">
+            <h1>Своя игра</h1>
+            <div class="players-input">
+                <div class="input-group">
+                    <label>Игрок 1:</label>
+                    <input type="text" id="player1" placeholder="Имя игрока 1" required>
+                </div>
+                <div class="input-group">
+                    <label>Игрок 2:</label>
+                    <input type="text" id="player2" placeholder="Имя игрока 2">
+                </div>
+                <div class="input-group">
+                    <label>Игрок 3:</label>
+                    <input type="text" id="player3" placeholder="Имя игрока 3">
+                </div>
+                <div class="input-group">
+                    <label>Игрок 4:</label>
+                    <input type="text" id="player4" placeholder="Имя игрока 4">
+                </div>
+            </div>
+            <button id="start-game" class="btn-primary">Начать игру</button>
+        </div>
+
+        <!-- Экран игры -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <h2 id="stage-title">Этап 1</h2>
+            </div>
+
+            <!-- Таблица категорий и вопросов -->
+            <div id="game-board" class="game-board"></div>
+
+            <!-- Панель очков -->
+            <div id="scoreboard" class="scoreboard"></div>
+        </div>
+
+        <!-- Модальное окно вопроса -->
+        <div id="question-modal" class="modal">
+            <div class="modal-content">
+                <div class="question-header">
+                    <h3 id="question-category">Категория</h3>
+                    <span id="question-points" class="points">100</span>
+                </div>
+                <div id="question-text" class="question-text">Текст вопроса</div>
+                
+                <!-- Выбор игрока -->
+                <div id="player-selection" class="player-selection">
+                    <p>Кто отвечает?</p>
+                    <div id="player-buttons" class="player-buttons"></div>
+                </div>
+
+                <!-- Кнопки ответа -->
+                <div id="answer-buttons" class="answer-buttons hidden">
+                    <button id="correct-btn" class="btn-correct">✅ Правильно</button>
+                    <button id="wrong-btn" class="btn-wrong">❌ Неправильно</button>
+                </div>
+
+                <!-- Кнопки управления -->
+                <div id="control-buttons" class="control-buttons">
+                    <button id="skip-btn" class="btn-skip">⏭️ Пропустить вопрос</button>
+                    <button id="show-answer-btn" class="btn-show-answer">👁️ Показать ответ</button>
+                </div>
+
+                <!-- Ответ для ведущего -->
+                <div id="host-answer" class="host-answer hidden">
+                    <p><strong>Ответ для ведущего:</strong></p>
+                    <p id="host-answer-text"></p>
+                </div>
+
+                <!-- Показ правильного ответа -->
+                <div id="correct-answer" class="correct-answer hidden">
+                    <p><strong>Правильный ответ:</strong></p>
+                    <p id="answer-text"></p>
+                    <button id="continue-btn" class="btn-primary">Продолжить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Экран результатов -->
+        <div id="results-screen" class="screen">
+            <h1>Результаты игры</h1>
+            <div id="results-list" class="results-list"></div>
+            <button id="restart-btn" class="btn-primary">Новая игра</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
